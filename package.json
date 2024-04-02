@@ -1,0 +1,20 @@
+{
+  "name": "ambidada_pia",
+  "version": "1.0.0",
+  "description": "Proyecto PIA",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "jeisson, kevin, brian",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JeissonR115/ambidada_PIA.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JeissonR115/ambidada_PIA/issues"
+  },
+  "homepage": "https://github.com/JeissonR115/ambidada_PIA#readme"
+}
