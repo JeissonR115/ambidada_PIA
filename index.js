@@ -1,5 +1,5 @@
 import express from "express";
-import { MongoClient } from "mongodb";
+import { DataBase } from "./src/DataBase.js";
 import dotenv from "dotenv";
 // Cargar las variables de entorno desde el archivo .env
 dotenv.config();
@@ -11,16 +11,15 @@ const collections = {
     sensorData: "sensorData",
     users: "users"
 };
-const connect = async (url, dbName) => {
+const dataBase = new DataBase(URL, dbName);
+app.get(`/${collections.sensorData}`, async (req, res, next) => {
     try {
-        const client = await MongoClient.connect(url);
-        console.log('Conexión exitosa a MongoDB');
-        return client.db(dbName);
+        const allData = await dataBase.getAll(collections.sensorData);
+        res.json(allData);
     } catch (err) {
-        throw Error(`No se ha establecido la conexión a la base de datos ${PORT}`);
+        next(err);
     }
-}
-connect(URL,dbName);
+});
 
 app.listen(PORT, () => {
     console.log(`Servidor en ejecución en http://localhost:${PORT}`);
