@@ -11,7 +11,7 @@ const collections = {
     sensorData: "sensorData",
     users: "users"
 };
-const dataBase = new DataBase(URL, dbName,collections);
+const dataBase = new DataBase(URL, dbName, collections);
 dataBase.use('sensorData')
 app.get(`/${collections.sensorData}`, async (req, res, next) => {
     try {
@@ -25,9 +25,9 @@ app.get(`/${collections.sensorData}`, async (req, res, next) => {
 app.get(`/${collections.sensorData}/date`, async (req, res) => {
     const startDate = req.query.start_date;
     const endDate = req.query.end_date;
-    const one =  req.query.one_day;
+    const one = req.query.one_day;
     if (!startDate) res.status(400).json({ error: "Se requieren las fechas de inicio y fin" });
-    const dates = await dataBase.getByDate(startDate, endDate,one);
+    const dates = await dataBase.getByDate(startDate, endDate, one);
     res.json(dates)
 
 });
