@@ -1,5 +1,5 @@
 
-import { start } from "./src/endPoints.js";
+import { start } from "./src/start.js";
 import dotenv from "dotenv";
 // Cargar las variables de entorno desde el archivo .env
 dotenv.config();
