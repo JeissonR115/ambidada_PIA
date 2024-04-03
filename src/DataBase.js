@@ -21,14 +21,14 @@ export class DataBase {
             throw new Error('No se ha establecido la conexión a la base de datos');
         }
     }
-    async connectCollection(){
-        const db= await this.connectDB();
+    async connectCollection() {
+        const db = await this.connectDB();
         return db.collection(this.collectionName);
     }
-    async getAll  ()  {
+    async getAll() {
         const collection = await this.connectCollection()
         return collection.find().toArray();
-    } 
+    }
     async getById(id) {
         const collection = await this.connectCollection()
         return collection.findOne({ _id: new ObjectId(id) });
@@ -45,7 +45,7 @@ export class DataBase {
         }).toArray();
     }
     async getByDate(start, end, one = false) {
-    
+
         const collection = await this.connectCollection()
         // Construye el filtro
         const filter = one ? { fecha: { "$regex": start } } : { fecha: { "$gte": start } };
