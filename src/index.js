@@ -50,3 +50,28 @@ async function inicio() {
 }
 
 inicio();
+
+
+
+
+const fs = require('fs');
+
+async function inicio() {
+    await agregarDatos();
+    mostrarDatos();
+    crearJSON(datos); // Llamar a la función para crear el JSON con los datos
+}
+
+function crearJSON(datos) {
+    const jsonData = JSON.stringify(datos, null, 2); // Convertir el objeto a formato JSON con formato legible
+    fs.writeFile('datos.json', jsonData, 'utf8', (err) => {
+        if (err) {
+            console.error('Error al escribir el archivo JSON:', err);
+            return;
+        }
+        console.log('Archivo JSON creado correctamente.');
+    });
+}
+
+inicio();
+
