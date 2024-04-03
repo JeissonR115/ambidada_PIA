@@ -57,4 +57,18 @@ export class DataBase {
             throw err;
         }
     }
+    async getByDate(start, end, collectionName, one = false) {
+        try {
+            const db = await this.connect();
+            const collection = db.collection(collectionName);
+            // Construye el filtro
+            const filter = one ? { fecha: {$regex:start} } : { fecha: { $gte: start } };
+            if (end) filter.fecha.$lte = end;
+            
+            return await collection.find(filter).toArray();
+        } catch (error) {
+            throw error;
+        }
+    }
+    
 }
