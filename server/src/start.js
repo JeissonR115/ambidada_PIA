@@ -22,8 +22,28 @@ export const start = ({ url, dbName, collectionList,collectionName, port }) => {
         res.json(dates)
 
     });
+
+    app.get (`${defaultUrl}/find`,async (req, res) =>{
+
+        const atributo = req.query.atributo;
+        const dato = req.query.dato;
+        const condicion = req.query.condicion;
+    
+        try {
+            const filtrar = await dataBase.filtrarPorDato({ atributo, dato, condicion });
+            res.json(filtrar);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    })
+    
+
+
+
     app.listen(port, () => {
         console.log(`Servidor en ejecución en http://localhost:${port}`);
     });
+
+
 }
 

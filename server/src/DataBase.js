@@ -47,11 +47,42 @@ export class DataBase {
     async getByDate(start, end, one = false) {
 
         const collection = await this.connectCollection()
-        // Construye el filtro
+        
         const filter = one ? { fecha: { "$regex": start } } : { fecha: { "$gte": start } };
         if (end) filter.fecha.$lte = end;
 
         return await collection.find(filter).toArray();
 
     }
+
+
+    async filtrarPorDato({ atributo, dato, condicion }) {
+        if (!atributo || !dato || !condicion) throw new Error('Se requieren un atributo, dato y condición válidos');
+    
+        const collection = await this.connectCollection();
+        const filter = {};
+    
+        switch (condicion) {
+            case 'mayor':
+                filter[atributo] = { $gt: parseInt(dato) };
+                break;
+            case 'menor':
+                filter[atributo] = { $lt: parseInt(dato) };
+                break;
+            case 'igual':
+                filter[atributo] = parseInt(dato);
+                break;
+            default:
+                throw new Error('Condición no válida');
+        }
+    
+        return await collection.find(filter).toArray();
+    }
+    
+
+    
 }
+
+
+
+
