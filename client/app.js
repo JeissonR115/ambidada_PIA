@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     searchButton.addEventListener('click', function() {
         const searchTerm = searchInput.value;
-        fetch(`http://localhost:3000/sensordata/date?start_date=${searchTerm}`)
+        fetch(`http://localhost:3000/sensordata/date?start_date=${searchTerm}&one_day=true`)
             .then(response => response.json())
             .then(data => {
                 apiDataDiv.innerHTML = '';
