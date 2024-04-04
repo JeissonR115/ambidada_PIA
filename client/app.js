@@ -5,15 +5,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     searchButton.addEventListener('click', function() {
         const searchTerm = searchInput.value;
-        fetch(`https://api.publicapis.org/entries?title=${searchTerm}`)
+        fetch(`http://localhost:3000/sensordata/date?start_date=${searchTerm}`)
             .then(response => response.json())
             .then(data => {
                 apiDataDiv.innerHTML = '';
-                if (data.entries && data.entries.length > 0) {
-                    data.entries.forEach(entry => {
-                        apiDataDiv.innerHTML += `<p>${entry.API} - ${entry.Description}</p>`;
-                    });
-                } else {
+                if(data.length > 0){
+                    data.forEach((sensor,i) => {
+                    apiDataDiv.innerHTML += `
+                    <div class = "sensor sensor--${i}">
+                    humedad: ${sensor.ambient}% - 
+                    temperatura: ${sensor.temperature}°C -
+                    fecha: ${sensor.fecha.match(/^(\d{4}-\d{2}-\d{2})/)[1]} 
+                    hora: ${sensor.fecha.match(/T(\d{2}:\d{2}:\d{2})/)[1]}
+                    </div>
+
+                    `;
+                });
+                }else{
                     apiDataDiv.innerHTML = '<p>No se encontraron resultados.</p>';
                 }
             })

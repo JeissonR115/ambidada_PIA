@@ -1,9 +1,11 @@
 
 import { DataBase } from "./DataBase.js";
+import  cors  from "cors";
 import express from "express";
 export const start = ({ url, dbName, collectionList,collectionName, port }) => {
 
     const app = express();
+    app.use(cors());
     const dataBase = new DataBase(url, dbName, collectionList);
     dataBase.use(collectionName)
     const defaultUrl = `/${collectionList[collectionName]}`
