@@ -41,7 +41,7 @@ export class DataBase {
         return await collection.find({
             [attribute]: Number(data)
                 ? Number(data)
-                : data.charAt(0).toUpperCase() + data.slice(1)
+                : data.toLowerCase(l)
         }).toArray();
     }
     async getByDate(start, end, one = false) {
