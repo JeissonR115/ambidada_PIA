@@ -22,7 +22,25 @@ export const start = ({ url, dbName, collectionList,collectionName, port }) => {
         res.json(dates)
 
     });
-
+    app.get(`${defaultUrl}/find/:attribute/:data`, async (req, res, next) => {
+        try {
+            const attributeList = {
+                ambient : 'ambient',
+                temperature : 'temperature',
+                place : 'place',
+            }
+            const attribute = req.params.attribute;
+            const data = req.params.data;
+            if (!attributeList.hasOwnProperty(attribute)) {
+                return res.status(400).send('Atributo no válido');
+            }
+    
+            const patientsByAttribute = await dataBase.getByAttribute(attributeList[attribute], data);
+            res.json(patientsByAttribute);
+        } catch (err) {
+            next(err);
+        }
+    });
     app.get (`${defaultUrl}/find`,async (req, res) =>{
 
         const atributo = req.query.atributo;
