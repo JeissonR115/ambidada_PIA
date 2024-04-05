@@ -73,4 +73,4 @@ node server/index.js
 
 ## Licencia
 
-Este proyecto está bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.
+Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](https://github.com/JeissonR115/ambidada_PIA/?tab=MIT-1-ov-file) para más detalles.
