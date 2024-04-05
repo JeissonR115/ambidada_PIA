@@ -42,3 +42,36 @@ h1 {
     margin-bottom: 10px;
     border-radius: 5px;
 }
+.filter-changer__container{
+   display: flex;
+   margin: 30px;
+}
+.filter-changer{
+    width: 150px;
+    height: 32px;
+    margin: 4px;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #666;
+    color: #fff;
+
+    user-select: none;
+}
+.filter-changer--span{
+    text-align: center;
+    font-size: 20px;
+    padding: 3px 0px;
+    display: block;
+    width: 100%;
+}
+.filter-changer--input {
+    display: none;
+    position: absolute;            
+}
+.filter-changer--input:checked + span{
+    background-color: #404040;
+    color: #F7F7F7;
+}

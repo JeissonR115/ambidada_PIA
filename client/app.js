@@ -1,31 +1,39 @@
 import { colorear } from "./color.js";
 const searchButton = document.getElementById('search-button');
 const apiDataDiv = document.getElementById('api-data');
+const radioButtons = document.querySelectorAll('.filter-changer--input');
 const searchInput = document.getElementById('search-input');
-let styleElement = document.createElement('style');
+const styleElement = document.createElement('style');
 document.head.appendChild(styleElement);
-let styleSheet = styleElement.sheet;
-
+const styleSheet = styleElement.sheet;
 
 async function getData(input) {
     try {
-        const response = await fetch(`http://localhost:3000/sensordata/${switchAttribute()}${input}`);
+        const attribute = findAttribute(radioButtons)
+        console.log(`http://localhost:3000/sensordata${switchAttribute(attribute)}${input}`)
+        const response = await fetch(`http://localhost:3000/sensordata${switchAttribute(attribute)}${input}`);
         return await response.json();
     } catch (error) {
         console.error('Error al consumir la API:', error);
         return [];
     }
 }
-function switchAttribute(attribute){
+function switchAttribute(attribute) {
     const attributeList = {
-        date:'date?one_day=true&start_date=',
+        date: '/date?one_day=true&start_date=',
         ambient: '/find/ambient/',
         temperature: '/find/temperature/',
         place: '/find/place/',
     }
+
     return attributeList[attribute]
 }
-function showData(data,container) {
+function findAttribute(inputs) {
+    let attribute = ""
+    inputs.forEach(input => input.checked ? attribute = input : false)
+    return attribute.value
+}
+function showData(data, container) {
     container.innerHTML = '';
     if (data.length > 0) {
         data.forEach((sensor, i) => {
@@ -43,10 +51,11 @@ function showData(data,container) {
         apiDataDiv.innerHTML = '<p>No se encontraron resultados.</p>';
     }
 }
-searchButton.addEventListener('click', async function() {
+async function search() {
     const searchTerm = searchInput.value;
     const data = await getData(searchTerm);
-    console.log(data.length)
     showData(data, apiDataDiv);
-    colorear(styleSheet,{value:207,saturation:85,lightness:90},data.length)
-});
+    colorear(styleSheet, { value: 207, saturation: 85, lightness: 90 }, data.length)
+}
+searchInput.addEventListener('change',search);
+searchButton.addEventListener('click',search)

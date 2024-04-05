@@ -11,4 +11,7 @@
     .sensor {
         font-size: 14px;
     }
+    .filter-changer__container{
+        flex-direction: column;
+    }
 }
