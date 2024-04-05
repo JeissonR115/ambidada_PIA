@@ -9,9 +9,8 @@ const styleSheet = styleElement.sheet;
 
 async function getData(input) {
     try {
-        const attribute = findAttribute(radioButtons)
-        console.log(`http://localhost:3000/sensordata${switchAttribute(attribute)}${input}`)
-        const response = await fetch(`http://localhost:3000/sensordata${switchAttribute(attribute)}${input}`);
+        const attribute = findAttribute(radioButtons).value
+        const response = await fetch(`http://localhost:3000/sensordata${switchAttribute(attribute)}${attribute != 'all' ? input : ""}`);
         return await response.json();
     } catch (error) {
         console.error('Error al consumir la API:', error);
@@ -24,14 +23,15 @@ function switchAttribute(attribute) {
         ambient: '/find/ambient/',
         temperature: '/find/temperature/',
         place: '/find/place/',
+        all: '/',
     }
 
     return attributeList[attribute]
 }
 function findAttribute(inputs) {
-    let attribute = ""
+    let attribute;
     inputs.forEach(input => input.checked ? attribute = input : false)
-    return attribute.value
+    return attribute
 }
 function showData(data, container) {
     container.innerHTML = '';
@@ -57,5 +57,6 @@ async function search() {
     showData(data, apiDataDiv);
     colorear(styleSheet, { value: 207, saturation: 85, lightness: 90 }, data.length)
 }
-searchInput.addEventListener('change',search);
-searchButton.addEventListener('click',search)
+searchInput.addEventListener('change', search);
+searchButton.addEventListener('click', search)
+radioButtons.forEach(radioButton => radioButton.addEventListener("click", search))
