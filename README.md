@@ -2,6 +2,16 @@
 
 Este proyecto es parte del Proyecto Integrador de Aprendizaje (PIA) desarrollado por Jeisson, Kevin y Bryan.
 
+# Indice
+- [Proyecto PIA - Ambidada](#proyecto-pia---ambidada)
+- [Indice](#indice)
+  - [Descripción](#descripción)
+  - [Instalación](#instalación)
+  - [Uso](#uso)
+  - [Endpoints de la API](#endpoints-de-la-api)
+  - [Autores](#autores)
+  - [Licencia](#licencia)
+
 ## Descripción
 
 El proyecto Ambidada PIA es una aplicación backend desarrollada con Node.js y Express. Proporciona funcionalidades para interactuar con una base de datos MongoDB y ofrece una API RESTful para acceder y manipular datos relacionados con sensores.
