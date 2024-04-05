@@ -1,0 +1,63 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+    color: #333;
+}
+
+h1 {
+    color: #666;
+}
+
+#search-input {
+    width: 300px;
+    height: 30px;
+    padding: 3px;
+    font-size: 16px;
+}
+
+#search-button {
+    height: 38px;
+    background-color: #4CAF50; 
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+#api-data {
+    margin-top: 20px;
+}
+
+.sensor {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.sensor--0 {
+    background-color: #e3f2fd;
+}
+
+.sensor--1 {
+    background-color: #bbdefb;
+}
+
+.sensor--2 {
+    background-color: #90caf9;
+}
+
+.sensor--3 {
+    background-color: #64b5f6;
+}
+
+.sensor--4 {
+    background-color: #42a5f5;
+}
