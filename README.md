@@ -2,9 +2,8 @@
 
 Este proyecto es parte del Proyecto Integrador de Aprendizaje (PIA) desarrollado por Jeisson, Kevin y Bryan.
 
-# Indice
+
 - [Proyecto PIA - Ambidada](#proyecto-pia---ambidada)
-- [Indice](#indice)
   - [Descripción](#descripción)
   - [Instalación](#instalación)
   - [Uso](#uso)
