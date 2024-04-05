@@ -67,9 +67,9 @@ node server/index.js
 
 ## Autores
 
--   Jeisson Rodriguez 
--   Kevin Ramirez
--   Bryan Zabala
+-   [Jeisson Rodriguez](https://github.com/JeissonR115) 
+-   [Kevin Ramirez](https://github.com/Kevin-879)
+-   [Bryan Zabala](https://github.com/eragon1020)
 
 ## Licencia
 
