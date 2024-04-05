@@ -7,14 +7,23 @@ document.head.appendChild(styleElement);
 let styleSheet = styleElement.sheet;
 
 
- async function getData(input) {
+async function getData(input) {
     try {
-        const response = await fetch(`http://localhost:3000/sensordata/date?start_date=${input}&one_day=true`);
+        const response = await fetch(`http://localhost:3000/sensordata/${switchAttribute()}${input}`);
         return await response.json();
     } catch (error) {
         console.error('Error al consumir la API:', error);
         return [];
     }
+}
+function switchAttribute(attribute){
+    const attributeList = {
+        date:'date?one_day=true&start_date=',
+        ambient: '/find/ambient/',
+        temperature: '/find/temperature/',
+        place: '/find/place/',
+    }
+    return attributeList[attribute]
 }
 function showData(data,container) {
     container.innerHTML = '';
