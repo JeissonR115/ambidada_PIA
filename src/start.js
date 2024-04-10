@@ -2,7 +2,8 @@ import { DataBase } from "./DataBase.js";
 
 import cors from "cors"; //para permitir solicitudes entre dominios
 import express from "express";
-
+import mongoose from "mongoose";
+import bodyParser from "body-parser";
 
 // Definir la función 'start' que inicia el servidor
 export const start = ({ url, dbName, collectionList, collectionName, port }) => {
@@ -77,6 +78,28 @@ export const start = ({ url, dbName, collectionList, collectionName, port }) => 
         }
     });
 
+const SensorData = mongoose.model('SensorData', {
+  temperatura: Number,
+  humedad: Number,
+  timestamp: { type: Date, default: Date.now }
+});
+
+app.use(bodyParser.json());
+
+app.post(`${defaultUrl}/esp32`, async (req, res) => {
+    try {
+        const body = req.body; // Obtener los datos enviados por el ESP32
+
+        // Guardar los datos en la base de datos
+        const savedData = await dataBase.guardarDatos(body);
+
+        // Responder con éxito
+        res.status(200).json({ message: "Datos recibidos y guardados correctamente", data: savedData });
+    } catch (error) {
+        console.error('Error al procesar la solicitud:', error);
+        res.status(500).json({ error: "Error interno del servidor" });
+    }
+});
     // Iniciar el servidor y escuchar en el puerto especificado
     app.listen(port, () => {
         console.log(`Servidor en ejecución en http://localhost:${port}`);

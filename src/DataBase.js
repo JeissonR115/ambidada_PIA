@@ -85,4 +85,18 @@ export class DataBase {
     
         return await this.collection.find(filter).toArray();
     }
+
+    // Método asíncrono para guardar un solo documento en la colección
+async guardarDatos(datos) {
+    if (!this.collection) throw new Error('No se ha establecido la colección');
+  
+    try {
+      const result = await this.collection.insertOne(datos);
+      return result.insertedId;
+    } catch (error) {
+      console.error('Error al guardar el documento:', error);
+      throw error;
+    }
+  }
+  
 }
