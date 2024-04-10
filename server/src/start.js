@@ -1,8 +1,6 @@
 import { DataBase } from "./DataBase.js";
-
 import cors from "cors"; //para permitir solicitudes entre dominios
 import express from "express";
-
 
 // Definir la función 'start' que inicia el servidor
 export const start = ({ url, dbName, collectionList, collectionName, port }) => {
@@ -81,4 +79,22 @@ export const start = ({ url, dbName, collectionList, collectionName, port }) => 
     app.listen(port, () => {
         console.log(`Servidor en ejecución en http://localhost:${port}`);
     });
+
+    // Endpoint para recibir datos del ESP32
+app.get(`${defaultUrl}/esp32-data`, async (req, res) => {
+    try {
+        // Aquí puedes procesar los datos recibidos del ESP32 y guardarlos en la base de datos
+        // Ejemplo de cómo recibir datos del cuerpo de la solicitud
+        const { temperatura, humedad } = req.body;
+
+        // Guardar los datos en la base de datos
+        // Asegúrate de adaptar este código según la estructura de tu base de datos y los datos recibidos del ESP32
+
+        res.status(200).json({ message: "Datos recibidos y guardados exitosamente" });
+    } catch (error) {
+        console.error('Error al procesar los datos del ESP32:', error);
+        res.status(500).json({ error: "Error interno del servidor al procesar los datos del ESP32" });
+    }
+});
+
 }
