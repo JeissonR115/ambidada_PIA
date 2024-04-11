@@ -56,9 +56,11 @@ export class DataBase {
     async getByDate(start, end, one = false) {
         if (!this.collection) throw new Error('No se ha establecido la colección.');
 
-        const filter = one ? { fecha: { "$regex": start } } : { fecha: { "$gte": start } };
-        if (end) filter.fecha.$lte = end;
-
+        const toDay = new Date(start);
+        let nextDay = new Date(start)
+        nextDay.setDate(nextDay.getDate()+1)
+        const filter = { fecha: { "$gte": toDay.toISOString(),"$lte": (one?nextDay.toISOString():new Date().toISOString()) } };
+        if (end) filter.fecha.$lte = new Date(end);
         return await this.collection.find(filter).toArray();
     }
 
@@ -91,7 +93,7 @@ export class DataBase {
         if (!this.collection) throw new Error('No se ha establecido la colección');
 
         try {
-            datos.fecha = new Date();
+            datos.fecha = new Date().toISOString();
             const result = await this.collection.insertOne(datos);
             return result.insertedId;
         } catch (error) {
