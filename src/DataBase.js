@@ -46,7 +46,7 @@ export class DataBase {
     async getByAttribute(attribute, data) {
         if (!this.collection) throw new Error('No se ha establecido la colección.');
         if (!attribute || !data) throw new Error('Se requieren un atributo y datos válidos');
-        
+
         return await this.collection.find({
             [attribute]: Number(data) ? Number(data) : data
         }).toArray();
@@ -55,7 +55,7 @@ export class DataBase {
     // Método asíncrono para obtener documentos dentro de un rango de fechas
     async getByDate(start, end, one = false) {
         if (!this.collection) throw new Error('No se ha establecido la colección.');
-        
+
         const filter = one ? { fecha: { "$regex": start } } : { fecha: { "$gte": start } };
         if (end) filter.fecha.$lte = end;
 
@@ -66,9 +66,9 @@ export class DataBase {
     async filtrarPorDato({ atributo, dato, condicion }) {
         if (!this.collection) throw new Error('No se ha establecido la colección.');
         if (!atributo || !dato || !condicion) throw new Error('Se requieren un atributo, dato y condición válidos');
-    
+
         const filter = {};
-    
+
         switch (condicion) {
             case 'mayor':
                 filter[atributo] = { $gt: parseInt(dato) };
@@ -82,21 +82,22 @@ export class DataBase {
             default:
                 throw new Error('Condición no válida');
         }
-    
+
         return await this.collection.find(filter).toArray();
     }
 
     // Método asíncrono para guardar un solo documento en la colección
-async guardarDatos(datos) {
-    if (!this.collection) throw new Error('No se ha establecido la colección');
-  
-    try {
-      const result = await this.collection.insertOne(datos);
-      return result.insertedId;
-    } catch (error) {
-      console.error('Error al guardar el documento:', error);
-      throw error;
+    async guardarDatos(datos) {
+        if (!this.collection) throw new Error('No se ha establecido la colección');
+
+        try {
+            datos.fecha = new Date();
+            const result = await this.collection.insertOne(datos);
+            return result.insertedId;
+        } catch (error) {
+            console.error('Error al guardar el documento:', error);
+            throw error;
+        }
     }
-  }
-  
+
 }
