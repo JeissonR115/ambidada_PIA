@@ -106,10 +106,10 @@ app.post('/login', async (req, res) => {
         const isAuthenticated = await login.verifyCredentials(username, password);
         if (isAuthenticated) {
             // Si las credenciales son válidas, responder con un mensaje de éxito
-            res.status(200).json({ message: "Inicio de sesión exitoso" });
+            res.status(200).json({ message: "Inicio de sesión exitoso",isLogin: true });
         } else {
             // Si las credenciales no son válidas, responder con un mensaje de error
-            res.status(401).json({ error: "Credenciales inválidas" });
+            res.status(401).json({ error: "Credenciales inválidas",isLogin: false });
         }
     } catch (error) {
         // Manejar errores internos del servidor
