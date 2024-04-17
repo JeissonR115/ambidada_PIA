@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -12,19 +13,24 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JeissonR115/ambidada_PIA.git"
+    "url": "git+https://github.com/JeissonR115/ambidadña_PIA.git"
   },
   "bugs": {
     "url": "https://github.com/JeissonR115/ambidada_PIA/issues"
   },
   "homepage": "https://github.com/JeissonR115/ambidada_PIA#readme",
   "dependencies": {
-    "body-parse": "^0.1.0",
+
+    "bcrypt": "^5.1.1",
+
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "mongodb": "^6.5.0",
     "mongoose": "^8.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }
