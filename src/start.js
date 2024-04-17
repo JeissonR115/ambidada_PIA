@@ -78,11 +78,7 @@ export const start = ({ url, dbName, collectionList, collectionName, port }) => 
         }
     });
 
-const SensorData = mongoose.model('SensorData', {
-  temperatura: Number,
-  humedad: Number,
-  timestamp: { type: Date, default: Date.now }
-});
+
 
 app.use(bodyParser.json());
 
