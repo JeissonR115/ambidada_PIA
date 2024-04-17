@@ -4,6 +4,7 @@ import cors from "cors"; //para permitir solicitudes entre dominios
 import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
+import Login from "./login.js";
 
 // Definir la función 'start' que inicia el servidor
 export const start = ({ url, dbName, collectionList, collectionName, port }) => {
@@ -78,11 +79,6 @@ export const start = ({ url, dbName, collectionList, collectionName, port }) => 
         }
     });
 
-const SensorData = mongoose.model('SensorData', {
-  temperatura: Number,
-  humedad: Number,
-  timestamp: { type: Date, default: Date.now }
-});
 
 app.use(bodyParser.json());
 
@@ -100,6 +96,28 @@ app.post(`${defaultUrl}/esp32`, async (req, res) => {
         res.status(500).json({ error: "Error interno del servidor" });
     }
 });
+
+
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body; // Obtener el nombre de usuario y la contraseña del cuerpo de la solicitud// Establecer la colección de usuarios en la base de datos
+    const login = new Login(username,password,dataBase);
+    try {
+        // Verificar las credenciales utilizando el método verifyCredentials de la clase Login
+        const isAuthenticated = await login.verifyCredentials(username, password);
+        if (isAuthenticated) {
+            // Si las credenciales son válidas, responder con un mensaje de éxito
+            res.status(200).json({ message: "Inicio de sesión exitoso" });
+        } else {
+            // Si las credenciales no son válidas, responder con un mensaje de error
+            res.status(401).json({ error: "Credenciales inválidas" });
+        }
+    } catch (error) {
+        // Manejar errores internos del servidor
+        console.error('Error al procesar la solicitud:', error);
+        res.status(500).json({ error: "Error interno del servidor" });
+    }
+});
+
     // Iniciar el servidor y escuchar en el puerto especificado
     app.listen(port, () => {
         console.log(`Servidor en ejecución en http://localhost:${port}`);
