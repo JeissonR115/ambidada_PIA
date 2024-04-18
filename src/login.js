@@ -4,7 +4,7 @@ class Login {
     constructor(username, password,database) {
         this.username = username;
         this.password = password;
-        this.database = database
+        this.database = database;
     }
 
     async verifyCredentials(username, password) {
@@ -36,7 +36,7 @@ class Login {
         try {
             this.database.use("users")
             // Obtener el usuario por nombre de usuario
-            const users = await this.database.getByAttribute('username', "jeissonr115");
+            const users = await this.database.getByAttribute('username', username);
             return users.length > 0 ? users[0] : null;
         } catch (error) {
             console.error('Error al buscar usuario:', error);

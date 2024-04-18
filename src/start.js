@@ -7,12 +7,13 @@ import bodyParser from "body-parser";
 import Login from "./login.js";
 
 // Definir la función 'start' que inicia el servidor
-export const start = ({ url, dbName, collectionList, collectionName, port }) => {
+export const start = async ({ url, dbName, collectionList, collectionName, port }) => {
 
     const app = express(); // Crear una instancia de la aplicación Express
     app.use(cors());// Habilitar el manejo de CORS como middleware
 
     const dataBase = new DataBase(url, dbName, collectionList);
+    await dataBase.connectDB();
     dataBase.use(collectionName);// Establecer la colección a utilizar en la base de datos
     const defaultUrl = `/${collectionList[collectionName]}`;// Definir la URL predeterminada para acceder a la colección
 
@@ -116,6 +117,7 @@ app.post('/login', async (req, res) => {
         console.error('Error al procesar la solicitud:', error);
         res.status(500).json({ error: "Error interno del servidor" });
     }
+    dataBase.use(collectionName)
 });
 
     // Iniciar el servidor y escuchar en el puerto especificado
