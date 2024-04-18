@@ -5,14 +5,16 @@ export class DataBase {
         this.url = url;
         this.dbName = dbName;
         this.collectionList = collections;
+        this.db = null;
         this.collection = null; // Variable para almacenar la conexión a la colección
     }
 
     async connectDB() {
         try {
-            const client = await MongoClient.connect(this.url);
+            const client = await MongoClient.connect(this.url); 
             console.log('Conexión exitosa a MongoDB');
-            return client.db(this.dbName);
+            this.db = client.db(this.dbName);
+            return true
         } catch (err) {
             throw new Error('No se ha establecido la conexión a la base de datos');
         }
@@ -20,15 +22,17 @@ export class DataBase {
 
     // Método para establecer la colección a utilizar
     async use(collectionName) {
-        if (!Object.keys(this.collectionList).includes(collectionName)) throw new Error('La colección no está en la lista.');
-        this.collection = await this.connectCollection(collectionName);
+        if (!Object.keys(this.collectionList).includes(collectionName)) {
+            console.error('La colección no está en la lista.');
+            return false
+        }
+        this.collection = this.db.collection(collectionName);
+        console.log("usando a la colección "+ collectionName)
+        return true
     }
 
     // Método para conectar a la colección especificada
-    async connectCollection(collectionName) {
-        const db = await this.connectDB();
-        return db.collection(collectionName);
-    }
+
 
     // Método asíncrono para obtener todos los documentos de la colección
     async getAll() {
@@ -58,8 +62,8 @@ export class DataBase {
 
         const toDay = new Date(start);
         let nextDay = new Date(start)
-        nextDay.setDate(nextDay.getDate()+1)
-        const filter = { fecha: { "$gte": toDay.toISOString(),"$lte": (one?nextDay.toISOString():new Date().toISOString()) } };
+        nextDay.setDate(nextDay.getDate() + 1)
+        const filter = { fecha: { "$gte": toDay.toISOString(), "$lte": (one ? nextDay.toISOString() : new Date().toISOString()) } };
         if (end) filter.fecha.$lte = new Date(end);
         return await this.collection.find(filter).toArray();
     }
