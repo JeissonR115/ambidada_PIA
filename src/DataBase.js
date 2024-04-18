@@ -11,10 +11,10 @@ export class DataBase {
 
     async connectDB() {
         try {
-            const client = await MongoClient.connect(this.url); console.log('Conexión exitosa a MongoDB');
-            const rta = client.db(this.dbName);
-            this.db = rta
-            return rta
+            const client = await MongoClient.connect(this.url); 
+            console.log('Conexión exitosa a MongoDB');
+            this.db = client.db(this.dbName);
+            return true
         } catch (err) {
             throw new Error('No se ha establecido la conexión a la base de datos');
         }
