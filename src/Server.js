@@ -2,7 +2,7 @@ import { DataBase } from "./DataBase.js";
 import cors from "cors";
 import express from "express";
 import bodyParser from "body-parser";
-import Login from "./login.js";
+import Login from "./Login.js";
 
 export class Server {
     constructor({ url, dbName, collectionList, collectionName, port }) {
