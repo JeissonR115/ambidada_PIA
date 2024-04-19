@@ -2,9 +2,6 @@ import { Server } from "./Server.js";
 import dotenv from "dotenv";// 'dotenv' es para cargar las variables de entorno
 
 export class Main {
-    constructor() {
-        this.startServer();
-    }
     startServer() {
         dotenv.config();
         const collections = {

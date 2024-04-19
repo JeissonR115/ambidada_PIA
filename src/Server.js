@@ -107,9 +107,13 @@ export class Server {
             }
             dataBase.use(this.collectionName);
         });
-
-        this.app.listen(this.port, () => {
-            console.log(`Servidor en ejecución en http://localhost:${this.port}`);
-        });
+        try {
+            this.app.listen(this.port, () => {
+                console.log(`Servidor en ejecución en http://localhost:${this.port}`);
+            });
+            return true;
+        } catch {
+            return false;
+        }
     }
 }
