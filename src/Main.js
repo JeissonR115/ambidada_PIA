@@ -1,4 +1,4 @@
-import { Server } from "./src/Server.js";
+import { Server } from "./Server.js";
 import dotenv from "dotenv";// 'dotenv' es para cargar las variables de entorno
 
 export class Main {
