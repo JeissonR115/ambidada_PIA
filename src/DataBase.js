@@ -1,5 +1,3 @@
-import { MongoClient, ObjectId } from "mongodb";
-
 export class DataBase {
     constructor(url, dbName, collections) {
         this.url = url;
@@ -35,67 +33,116 @@ export class DataBase {
 
 
     // Método asíncrono para obtener todos los documentos de la colección
-    async getAll() {
+    async getAll(limit = null, filter = null) {
         if (!this.collection) throw new Error('No se ha establecido la colección.');
-        return this.collection.find().toArray();
+    
+        let query = {};
+    
+        if (filter === 'mayores') {
+            query = { $query: {}, $orderby: { _id: -1 } }; // Ordena por ID descendente (mayor a menor)
+        } else if (filter === 'menores') {
+            query = { $query: {}, $orderby: { _id: 1 } }; // Ordena por ID ascendente (menor a mayor)
+        }
+    
+        let cursor = this.collection.find({}, query);
+    
+        if (limit) {
+            cursor = cursor.limit(limit);
+        }
+    
+        return cursor.toArray();
     }
-
-    // Método asíncrono para obtener un documento por su ID
+    
     async getById(id) {
         if (!this.collection) throw new Error('No se ha establecido la colección.');
         return this.collection.findOne({ _id: new ObjectId(id) });
     }
-
-    // Método asíncrono para obtener documentos por un atributo específico
-    async getByAttribute(attribute, data) {
+    
+    async getByAttribute(attribute, data, limit = null, filter = null) {
         if (!this.collection) throw new Error('No se ha establecido la colección.');
         if (!attribute || !data) throw new Error('Se requieren un atributo y datos válidos');
-
-        return await this.collection.find({
+    
+        let query = {
             [attribute]: Number(data) ? Number(data) : data
-        }).toArray();
+        };
+    
+        if (filter === 'mayores') {
+            query.$orderby = { _id: -1 }; // Ordena por ID descendente (mayor a menor)
+        } else if (filter === 'menores') {
+            query.$orderby = { _id: 1 }; // Ordena por ID ascendente (menor a mayor)
+        }
+    
+        let cursor = this.collection.find(query);
+    
+        if (limit) {
+            cursor = cursor.limit(limit);
+        }
+    
+        return cursor.toArray();
     }
-
-    // Método asíncrono para obtener documentos dentro de un rango de fechas
-    async getByDate(start, end, one = false) {
+    
+    async getByDate(start, end, limit = null, filter = null, one = false) {
         if (!this.collection) throw new Error('No se ha establecido la colección.');
-
+    
         const toDay = new Date(start);
         let nextDay = new Date(start)
         nextDay.setDate(nextDay.getDate() + 1)
-        const filter = { fecha: { "$gte": toDay.toISOString(), "$lte": (one ? nextDay.toISOString() : new Date().toISOString()) } };
-        if (end) filter.fecha.$lte = new Date(end);
-        return await this.collection.find(filter).toArray();
+        const filterQuery = { fecha: { "$gte": toDay.toISOString(), "$lte": (one ? nextDay.toISOString() : new Date().toISOString()) } };
+        if (end) filterQuery.fecha.$lte = new Date(end);
+    
+        if (filter === 'mayores') {
+            filterQuery.$orderby = { _id: -1 }; // Ordena por ID descendente (mayor a menor)
+        } else if (filter === 'menores') {
+            filterQuery.$orderby = { _id: 1 }; // Ordena por ID ascendente (menor a mayor)
+        }
+    
+        let cursor = this.collection.find(filterQuery);
+    
+        if (limit) {
+            cursor = cursor.limit(limit);
+        }
+    
+        return cursor.toArray();
     }
-
-    // Método asíncrono para filtrar documentos por un dato específico bajo una condición
-    async filtrarPorDato({ atributo, dato, condicion }) {
+    
+    async filtrarPorDato({ atributo, dato, condicion }, limit = null, filter = null) {
         if (!this.collection) throw new Error('No se ha establecido la colección.');
         if (!atributo || !dato || !condicion) throw new Error('Se requieren un atributo, dato y condición válidos');
-
-        const filter = {};
-
+    
+        const filterQuery = {};
+    
         switch (condicion) {
             case 'mayor':
-                filter[atributo] = { $gt: parseInt(dato) };
+                filterQuery[atributo] = { $gt: parseInt(dato) };
                 break;
             case 'menor':
-                filter[atributo] = { $lt: parseInt(dato) };
+                filterQuery[atributo] = { $lt: parseInt(dato) };
                 break;
             case 'igual':
-                filter[atributo] = parseInt(dato);
+                filterQuery[atributo] = parseInt(dato);
                 break;
             default:
                 throw new Error('Condición no válida');
         }
-
-        return await this.collection.find(filter).toArray();
+    
+        if (filter === 'mayores') {
+            filterQuery.$orderby = { _id: -1 }; // Ordena por ID descendente (mayor a menor)
+        } else if (filter === 'menores') {
+            filterQuery.$orderby = { _id: 1 }; // Ordena por ID ascendente (menor a mayor)
+        }
+    
+        let cursor = this.collection.find(filterQuery);
+    
+        if (limit) {
+            cursor = cursor.limit(limit);
+        }
+    
+        return cursor.toArray();
     }
-
-    // Método asíncrono para guardar un solo documento en la colección
+    
     async guardarDatos(datos) {
         if (!this.collection) throw new Error('No se ha establecido la colección');
-
+    
         try {
             datos.fecha = new Date().toISOString();
             const result = await this.collection.insertOne(datos);
@@ -105,5 +152,5 @@ export class DataBase {
             throw error;
         }
     }
-
+    
 }
