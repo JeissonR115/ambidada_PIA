@@ -1,3 +1,4 @@
+
 import { start } from "./src/start.js";
 import dotenv from "dotenv";// 'dotenv' es para cargar las variables de entorno
 import bcrypt from "bcrypt";
@@ -24,3 +25,6 @@ start({
     collectionList: collections,
     collectionName: collections.sensorData,
 });
+
+import { Main } from "./src/Main.js";
+new Main().startServer();
