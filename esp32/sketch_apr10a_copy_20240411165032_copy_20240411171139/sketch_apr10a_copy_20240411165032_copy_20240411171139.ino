@@ -1,7 +1,7 @@
 #include <HTTPClient.h>
 #include "DHTesp.h"
 
-int pinDHT = 26;
+int pinDHT = 4;
 DHTesp dht;
 
 void setup() {

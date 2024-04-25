@@ -1,6 +1,6 @@
 import { start } from "./src/start.js";
 import dotenv from "dotenv";// 'dotenv' es para cargar las variables de entorno
-
+import bcrypt from "bcrypt";
 dotenv.config();// Cargar las variables de entorno desde el archivo '.env'
 
 
