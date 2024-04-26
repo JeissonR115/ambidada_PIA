@@ -1,3 +1,5 @@
+import { MongoClient, ObjectId } from "mongodb";
+
 export class DataBase {
     constructor(url, dbName, collections) {
         this.url = url;
@@ -12,27 +14,22 @@ export class DataBase {
             const client = await MongoClient.connect(this.url); 
             console.log('Conexión exitosa a MongoDB');
             this.db = client.db(this.dbName);
-            return true
+            return true;
         } catch (err) {
             throw new Error('No se ha establecido la conexión a la base de datos');
         }
     }
 
-    // Método para establecer la colección a utilizar
     async use(collectionName) {
         if (!Object.keys(this.collectionList).includes(collectionName)) {
             console.error('La colección no está en la lista.');
-            return false
+            return false;
         }
         this.collection = this.db.collection(collectionName);
-        console.log("usando a la colección "+ collectionName)
-        return true
+        console.log("usando a la colección "+ collectionName);
+        return true;
     }
 
-    // Método para conectar a la colección especificada
-
-
-    // Método asíncrono para obtener todos los documentos de la colección
     async getAll(limit = null, filter = null) {
         if (!this.collection) throw new Error('No se ha establecido la colección.');
     
@@ -48,6 +45,8 @@ export class DataBase {
     
         if (limit) {
             cursor = cursor.limit(limit);
+        } else {
+            cursor = cursor.limit(10); // Limitar por defecto a los 10 primeros elementos si no se especifica un límite
         }
     
         return cursor.toArray();
@@ -76,6 +75,8 @@ export class DataBase {
     
         if (limit) {
             cursor = cursor.limit(limit);
+        } else {
+            cursor = cursor.limit(10);
         }
     
         return cursor.toArray();
@@ -100,6 +101,8 @@ export class DataBase {
     
         if (limit) {
             cursor = cursor.limit(limit);
+        } else {
+            cursor = cursor.limit(10);
         }
     
         return cursor.toArray();
@@ -125,16 +128,12 @@ export class DataBase {
                 throw new Error('Condición no válida');
         }
     
-        if (filter === 'mayores') {
-            filterQuery.$orderby = { _id: -1 }; // Ordena por ID descendente (mayor a menor)
-        } else if (filter === 'menores') {
-            filterQuery.$orderby = { _id: 1 }; // Ordena por ID ascendente (menor a mayor)
-        }
-    
         let cursor = this.collection.find(filterQuery);
     
         if (limit) {
             cursor = cursor.limit(limit);
+        } else {
+            cursor = cursor.limit(10);
         }
     
         return cursor.toArray();
@@ -152,5 +151,22 @@ export class DataBase {
             throw error;
         }
     }
+
+    async getTopBottomData(attribute, limit, isTop) {
+        if (!this.collection) throw new Error('No se ha establecido la colección.');
+        if (!attribute) throw new Error('Se requiere un atributo válido');
+    
+        const sortOrder = isTop ? { [attribute]: -1 } : { [attribute]: 1 };
+    
+        const data = await this.collection.find({}, { projection: { _id: 1, [attribute]: 1, ambient: 1, place: 1 } }).sort(sortOrder).limit(limit).toArray();
+    
+        return data.map(doc => ({
+            _id: doc._id,
+            [attribute]: doc[attribute],
+            ambient: doc.ambient,
+            place: doc.place
+        }));
+    }
     
 }
+

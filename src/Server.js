@@ -14,7 +14,6 @@ export class Server {
     }
 
     async start() {
-
         this.app = express();
         this.app.use(cors());
         this.app.use(bodyParser.json());
@@ -107,6 +106,32 @@ export class Server {
             }
             dataBase.use(this.collectionName);
         });
+        this.app.get(`${defaultUrl}/top_bottom`, async (req, res) => {
+            try {
+                const topBottomData = {};
+        
+                const attributes = ['temperature', 'ambient'];
+        
+                for (const attribute of attributes) {
+                    // Verifica si se ha especificado el parámetro de atributo en la URL
+                    if (req.query[attribute]) {
+                        const topData = await dataBase.getTopBottomData(attribute, 10, true);
+                        const bottomData = await dataBase.getTopBottomData(attribute, 10, false);
+                        topBottomData[attribute] = { top: topData, bottom: bottomData };
+                    }
+                }
+                res.json(topBottomData);
+            } catch (error) {
+                console.error('Error al procesar la solicitud:', error);
+                res.status(500).json({ error: "Error interno del servidor" });
+            }
+        });
+        
+        
+        
+        
+        
+
         try {
             this.app.listen(this.port, () => {
                 console.log(`Servidor en ejecución en http://localhost:${this.port}`);
