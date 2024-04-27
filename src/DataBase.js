@@ -82,30 +82,13 @@ export class DataBase {
         return cursor.toArray();
     }
     
-    async getByDate(start, end, limit = null, filter = null, one = false) {
+    async getByDate(start, end, one = false) {
         if (!this.collection) throw new Error('No se ha establecido la colección.');
-    
-        const toDay = new Date(start);
-        let nextDay = new Date(start)
-        nextDay.setDate(nextDay.getDate() + 1)
-        const filterQuery = { fecha: { "$gte": toDay.toISOString(), "$lte": (one ? nextDay.toISOString() : new Date().toISOString()) } };
-        if (end) filterQuery.fecha.$lte = new Date(end);
-    
-        if (filter === 'mayores') {
-            filterQuery.$orderby = { _id: -1 }; // Ordena por ID descendente (mayor a menor)
-        } else if (filter === 'menores') {
-            filterQuery.$orderby = { _id: 1 }; // Ordena por ID ascendente (menor a mayor)
-        }
-    
-        let cursor = this.collection.find(filterQuery);
-    
-        if (limit) {
-            cursor = cursor.limit(limit);
-        } else {
-            cursor = cursor.limit(10);
-        }
-    
-        return cursor.toArray();
+
+        const filter = one ? { fecha: { "$regex": start } } : { fecha: { "$gte": start } };
+        if (end) filter.fecha.$lte = end;
+
+        return await this.collection.find(filter).toArray();
     }
     
     async filtrarPorDato({ atributo, dato, condicion }, limit = null, filter = null) {
