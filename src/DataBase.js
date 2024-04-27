@@ -35,22 +35,21 @@ export class DataBase {
     
         let query = {};
     
-        if (filter === 'mayores') {
-            query = { $query: {}, $orderby: { _id: -1 } }; // Ordena por ID descendente (mayor a menor)
-        } else if (filter === 'menores') {
-            query = { $query: {}, $orderby: { _id: 1 } }; // Ordena por ID ascendente (menor a mayor)
-        }
+        // if (filter === 'mayores') {
+        //     query = { $query: {}, $orderby: { _id: -1 } }; // Ordena por ID descendente (mayor a menor)
+        // } else if (filter === 'menores') {
+        //     query = { $query: {}, $orderby: { _id: 1 } }; // Ordena por ID ascendente (menor a mayor)
+        // }
     
         let cursor = this.collection.find({}, query);
     
-        if (limit) {
+        if (limit !== null) {
             cursor = cursor.limit(limit);
-        } else {
-            cursor = cursor.limit(10); // Limitar por defecto a los 10 primeros elementos si no se especifica un límite
         }
     
         return cursor.toArray();
     }
+    
     
     async getById(id) {
         if (!this.collection) throw new Error('No se ha establecido la colección.');

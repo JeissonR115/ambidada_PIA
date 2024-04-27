@@ -2,7 +2,9 @@ import { DataBase } from "./DataBase.js";
 import cors from "cors";
 import express from "express";
 import bodyParser from "body-parser";
+import useragent from 'useragent';
 import Login from "./Login.js";
+import TextFileEditor from "./TextFileEditor.js";
 
 export class Server {
     constructor({ url, dbName, collectionList, collectionName, port }) {
@@ -11,11 +13,35 @@ export class Server {
         this.collectionList = collectionList;
         this.collectionName = collectionName;
         this.port = port;
+        this.file = new TextFileEditor('./user_browser_information.txt')
     }
 
     async start() {
         this.app = express();
         this.app.use(cors());
+        this.app.use(async (req, res, next) => {
+            try {
+                console.log('URL solicitada:', `http://localhost:${this.port}${req.url}`);
+        
+                const userAgent = req.headers['user-agent'];
+                const agent = useragent.parse(userAgent);
+        
+                const deviceInfo = {
+                    browser: agent.toAgent(),
+                    os: agent.os.toString(),
+                    device: agent.device.toString(),
+                };
+        
+                await this.file.append(`---\nURL solicitada:http://localhost:${this.port}${req.url}\nBrowser: ${deviceInfo.browser}\nOS: ${deviceInfo.os}\nDevice: ${deviceInfo.device}\n`);
+                console.log('Dispositivo detectado:', agent);
+        
+                next();
+            } catch (err) {
+                console.error('Error al agregar información del dispositivo:', err);
+                next(err); // Pasa el error al siguiente middleware o controlador de errores
+            }
+        });
+        
         this.app.use(bodyParser.json());
 
         const dataBase = new DataBase(this.url, this.dbName, this.collectionList);
@@ -24,9 +50,17 @@ export class Server {
         const defaultUrl = `/${this.collectionList[this.collectionName]}`;
 
         this.app.get(defaultUrl, async (req, res) => {
-            const allData = await dataBase.getAll();
-            res.json(allData);
+            try {
+                const { filter, limit } = req.query; // Obtener los parámetros de filtro y límite de la solicitud
+                const allData = await dataBase.getAll(parseInt(limit), filter); // Llamar a getAll con el límite y filtro proporcionados
+                console.log(allData);
+                res.json(allData); // Enviar los datos como respuesta JSON
+            } catch (error) {
+                console.error('Error al obtener todos los datos:', error);
+                res.status(500).json({ error: "Error interno del servidor" }); // Manejar errores internos del servidor
+            }
         });
+        
 
         this.app.get(`${defaultUrl}/date`, async (req, res) => {
             try {
@@ -126,11 +160,6 @@ export class Server {
                 res.status(500).json({ error: "Error interno del servidor" });
             }
         });
-        
-        
-        
-        
-        
 
         try {
             this.app.listen(this.port, () => {
