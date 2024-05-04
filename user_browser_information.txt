@@ -1,0 +1,50 @@
+---
+URL solicitada:http://localhost:3000/sensordata/esp32
+Browser: Other 0.0.0
+OS: Other 0.0.0
+Device: Other 0.0.0
+---
+URL solicitada:http://localhost:3000/sensordata/esp32
+Browser: Other 0.0.0
+OS: Other 0.0.0
+Device: Other 0.0.0
+---
+URL solicitada:http://localhost:3000/sensordata/esp32
+Browser: Other 0.0.0
+OS: Other 0.0.0
+Device: Other 0.0.0
+---
+URL solicitada:http://localhost:3000/sensordata/find/place/restaurante
+Browser: Chrome 124.0.0
+OS: Windows 10.0.0
+Device: Other 0.0.0
+---
+URL solicitada:http://localhost:3000/login
+Browser: Chrome 124.0.0
+OS: Windows 10.0.0
+Device: Other 0.0.0
+---
+URL solicitada:http://localhost:3000/sensordata/find/place/restaurante
+Browser: Chrome 124.0.0
+OS: Windows 10.0.0
+Device: Other 0.0.0
+---
+URL solicitada:http://localhost:3000/sensordata/esp32
+Browser: Other 0.0.0
+OS: Other 0.0.0
+Device: Other 0.0.0
+---
+URL solicitada:http://localhost:3000/sensordata/esp32
+Browser: Other 0.0.0
+OS: Other 0.0.0
+Device: Other 0.0.0
+---
+URL solicitada:http://localhost:3000/login
+Browser: Chrome 124.0.0
+OS: Windows 10.0.0
+Device: Other 0.0.0
+---
+URL solicitada:http://localhost:3000/sensordata/find/place/restaurante
+Browser: Chrome 124.0.0
+OS: Windows 10.0.0
+Device: Other 0.0.0

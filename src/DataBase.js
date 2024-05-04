@@ -125,7 +125,10 @@ export class DataBase {
         if (!this.collection) throw new Error('No se ha establecido la colección');
     
         try {
-            datos.fecha = new Date().toISOString();
+            var fechaActual = new Date();
+            fechaActual.setHours(fechaActual.getHours() - 5);
+            var fechaRestada = fechaActual.toISOString();
+            datos.fecha = fechaRestada;
             const result = await this.collection.insertOne(datos);
             return result.insertedId;
         } catch (error) {
