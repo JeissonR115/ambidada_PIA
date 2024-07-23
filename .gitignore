@@ -129,5 +129,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+*.txt
+
 # archivo txt
 user_browser_information.txt
